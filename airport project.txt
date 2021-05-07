@@ -1,0 +1,140 @@
+---Find list of Airports operating in the Country India
+
+plane = LOAD 'airports_mod.dat' using PigStorage(',') as (air_id:chararray, name:chararray, city:chararray, country:chararray, IATA:chararray, ICAO:chararray, lal:Double, lon:Double, alt:Double, tmz:double, dst:chararray, dtmz:chararray);
+
+--limit10 =limit plane 10 ;
+
+--dump limit10 ;
+
+fplane = FILTER plane BY country == 'India' ;
+
+dump fplane ;
+
+
+----result------
+
+(2994,Ahmedabad,Ahmedabad,India,AMD,VAAH,23.077242,72.63465,189.0,5.5,N,Asia/Calcutta)
+(2995,Akola,Akola,India,AKD,VAAK,20.699006,77.058628,999.0,5.5,N,Asia/Calcutta)
+(2996,Aurangabad,Aurangabad,India,IXU,VAAU,19.862728,75.398114,1911.0,5.5,N,Asia/Calcutta)
+(2997,Chhatrapati Shivaji Intl,Mumbai,India,BOM,VABB,19.088686,72.867919,37.0,5.5,N,Asia/Calcutta)          # limit 10 result
+(2998,Bilaspur,Bilaspur,India,PAB,VABI,21.9884,82.110983,899.0,5.5,N,Asia/Calcutta)
+(2999,Bhuj,Bhuj,India,BHJ,VABJ,23.287828,69.670147,268.0,5.5,N,Asia/Calcutta)
+(3000,Belgaum,Belgaum,India,IXG,VABM,15.859286,74.618292,2487.0,5.5,N,Asia/Calcutta)
+(3001,Vadodara,Baroda,India,BDQ,VABO,22.336164,73.226289,129.0,5.5,N,Asia/Calcutta)
+(3002,Bhopal,Bhopal,India,BHO,VABP,23.287467,77.337375,1719.0,5.5,N,Asia/Calcutta)
+
+
+
+
+---Find the list of Active Airlines in United state
+
+arline = LOAD 'Final_airlines' using PigStorage(',') as (air_id:chararray, name:chararray, alias:chararray, IATA:chararray, ICAO:chararray,clsn:chararray, country:chararray, active:chararray);
+
+
+--limit10 = limit arline 10 ;
+
+--dump limit10 ;
+
+
+farline = FILTER arline BY country == 'United States' ;
+
+--dump farline ;
+
+afarline = FILTER farline BY active == 'Y' ;
+
+dump afarline ;
+
+
+-----result-----
+
+
+(10,40-Mile Air,\N,Q5,MLA,MILE-AIR,United States,Y)
+(22,Aloha Airlines,\N,AQ,AAH,ALOHA,United States,Y)
+(24,American Airlines,\N,AA,AAL,AMERICAN,United States,Y)
+(35,Allegiant Air,\N,G4,AAY,ALLEGIANT,United States,Y)
+(109,Alaska Central Express,\N,KO,AER,ACE AIR,United States,Y)
+(149,Air Cargo Carriers,\N,2Q,SNC,NIGHT CARGO,United States,Y)                  # limit 10 result.
+(210,Airlift International,\N,,AIR,AIRLIFT,United States,Y)
+(281,America West Airlines,\N,HP,AWE,CACTUS,United States,Y)
+(282,Air Wisconsin,\N,ZW,AWI,AIR WISCONSIN,United States,Y)
+(287,Allegheny Commuter Airlines,\N,,ALO,ALLEGHENY,United States,Y)
+
+
+---List of Airlines operating with code share
+
+
+routes = LOAD 'routes.dat' using PigStorage(',') as (airline:chararray,airID:long, sair:chararray, sairID:chararray, dair:chararray,dairID:chararray, codeshare:chararray, stops:chararray,eqpmt:chararray);
+
+froutes = FILTER routes BY codeshare == 'Y' ;
+
+dump froutes ;
+
+---result----
+
+(2P,897,GES,6011,MNL,2397,Y,0,320)
+(2P,897,MNL,2397,GES,6011,Y,0,320)
+(4M,3201,DFW,3670,EZE,3988,Y,0,777)
+(4M,3201,EZE,3988,DFW,3670,Y,0,777)                                      # limit 10 result.
+(4M,3201,EZE,3988,JFK,3797,Y,0,777)
+(4M,3201,JFK,3797,EZE,3988,Y,0,777)
+(5N,503,ARH,4362,CSH,6110,Y,0,AN4)
+(5N,503,ARH,4362,MMK,2949,Y,0,AN4)
+(5N,503,ARH,4362,USK,4369,Y,0,AN4)
+(5N,503,CSH,6110,ARH,4362,Y,0,AN4)
+
+
+----Find the list of Airlines having zero stops
+
+
+routes = LOAD 'routes.dat' using PigStorage(',') as (airline:chararray,airID:long, sair:chararray, sairID:chararray, dair:chararray,dairID:chararray, codeshare:chararray, stops:chararray,eqpmt:chararray);
+
+
+froutes = FILTER routes BY stops == '0' ;
+
+dump froutes;
+
+----result----
+
+(2B,410,AER,2965,KZN,2990,,0,CR2)
+(2B,410,ASF,2966,KZN,2990,,0,CR2)
+(2B,410,ASF,2966,MRV,2962,,0,CR2)
+(2B,410,CEK,2968,KZN,2990,,0,CR2)
+(2B,410,CEK,2968,OVB,4078,,0,CR2)                                      # limit 10 result 
+(2B,410,DME,4029,KZN,2990,,0,CR2)
+(2B,410,DME,4029,NBC,6969,,0,CR2)
+(2B,410,DME,4029,TGK,\N,,0,CR2)
+(2B,410,DME,4029,UUA,6160,,0,CR2)
+(2B,410,EGO,6156,KGD,2952,,0,CR2)
+
+
+-----Which country (or) territory having highest Airports
+
+plane = LOAD 'airports_mod.dat' using PigStorage(',') as (air_id:chararray, name:chararray, city:chararray, country:chararray, IATA:chararray, ICAO:chararray, lal:Double, lon:Double, alt:Double, tmz:double, dst:chararray, dtmz:chararray);
+
+
+groupbycountry = GROUP plane BY country;
+
+
+countbycountry = FOREACH groupbycountry GENERATE group as country, COUNT(plane) as headcount;
+
+
+orderbycount = order countbycountry by $1 desc;
+
+dump orderbycount ;
+
+
+-----result-----
+
+
+(United States,1697)
+(Canada,435)
+(Germany,321)
+(Australia,263)                                        # limit 10 result
+(Russia,249)
+(France,233)
+(China,219)
+(Brazil,213)
+(United Kingdom,209)
+(India,140)
+
+
