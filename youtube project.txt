@@ -1,0 +1,63 @@
+create table youtube (id string, uploder string, intervel int, category string, lengthofv int, nbrofv int, ratingofv float, nbrofr int, nbrofc int, relv string)
+row format delimited
+fields terminated by ','
+stored as textfile ;
+
+LOAD DATA LOCAL INPATH 'youtubedata.txt' INTO TABLE youtube ;
+  
+
+---Find out the top 5 categories with maximum number of videos uploaded
+
+select category, count(id) as total  from youtube group by category order by total desc limit 10 ;
+
+
+----result---
+
+Entertainment   908
+Music   862
+Comedy  414
+People & Blogs  398
+News & Politics 333
+Film & Animation        260
+Sports  251
+Howto & Style   137
+Travel & Events 112
+Pets & Animals  95
+
+----Find out the top 10 rated videos.
+
+select category, cast( ratingofv * nbrofr as double ) as total from youtube order by total desc limit 10 ;
+
+
+------result----
+
+
+Comedy  362269.3125
+Music   354563.90625
+Music   353264.21875
+Entertainment   295552.1875
+Pets & Animals  287188.0
+Pets & Animals  270210.9375
+Music   214492.609375
+Entertainment   170396.640625
+Music   168093.65625
+People & Blogs  156571.828125
+
+----Find out the most viewed videos.
+
+select id,category, max(nbrofv) as total from youtube group by id,category  order by total  desc limit 10 ;
+
+
+----result----
+
+12Z3J1uzd0Q     Film & Animation        65341925
+4DC4Rb9quKk     Music   33754615
+LU8DDYz68kM     Pets & Animals  27721690
+kHmvkRoEowc     Entertainment   18235463
+Md6rURKhZmA     Music   18141492
+EwTZ2xpQwpA     Music   16841569
+A2f3cuUXXRs     Music   13038204
+rZBA0SKmQy8     Comedy  11007201
+irp8CNj9qBI     Music   10172172
+ZCYaw5tGYAs     Comedy  8944331
+
