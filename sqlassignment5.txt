@@ -1,0 +1,19 @@
+create function noparameters()
+return int                         #QUESTION NO 1
+as begin 
+return (select sum (salary) from employee
+end 
+
+
+create trigger safty on data base 
+for create_table ,alter_table,drop_table
+as 'you can not create' , 'drop and alter table in this database'
+rollback;                                 # QUESTION NO 2
+
+
+use blessel go 
+create procedure dbo.hello
+as select * from dept
+go                                         # QUESTION NO 3
+
+exec dbo.hello
