@@ -1,0 +1,110 @@
+create table movies as select(mID int, mnme string, yofr int, rofm float, mds int) row format delimited fields terminated by ',' stored as textfile ;
+LOAD DATA LOCAL INPATH 'moviesdataset.txt' INTO TABLE movies;
+
+
+---Find the number of movies released between 1950 and 1960
+
+select yofr from movies where yofr between 1950 and 1960;
+
+
+---Find the number of movies having rating more than 4.
+
+select * from movies where rofm > 4 limit 10 ;
+
+
+--Find the movies whose rating are between 3 and 4.
+
+select rofm from movies where rofm between 3 and 4;
+
+
+---Find the number of movies with duration more than 2 hours (7200 second)
+
+select * from movies where mds > 7200 ;
+
+
+---Find the list of years and number of movies released each year.
+
+select yofr ,count(mID) as total from movies group by yofr order by total desc limit 10 ;
+
+
+---Find the total number of movies in the dataset.
+
+select count(*) from movies;
+
+
+-----ANSWERS--------
+
+---Find the number of movies released between 1950 and 1960.
+
+1950
+1959
+1956
+1952                                       # limit 10 result.
+1953
+1960
+1955
+1953
+1954
+1958
+
+----Find the number of movies having rating more than 4.
+
+
+139     Pulp Fiction    1994    4.1     9265
+288     Life Is Beautiful       1997    4.2     6973
+303     Mulan: Special Edition  1998    4.2     5270
+465     Forrest Gump    1994    4.3     8525
+491     Braveheart      1995    4.2     10658
+591     White Christmas 1954    4.3     7201
+673     Roman Holiday   1953    4.1     7087
+690     The African Queen       1951    4.1     6312
+955     The Boondock Saints     1999    4.1     6507
+985     Paid in Full    2002    4.1     5883
+
+
+-----Find the movies whose rating are between 3 and 4.
+
+
+3.9
+3.5
+3.2
+3.8
+3.5                      # limit 10 result.
+3.4
+3.5
+3.4
+3.3
+3.6
+
+
+-----Find the number of movies with duration more than 2 hours (7200 second.
+
+3       Orphans of the Storm    1921    3.2     9062
+13      The Birth of a Nation   1915    2.9     12118
+14      The Boys from Brazil    1978    3.6     7417
+21      Born on the Fourth of July      1989    3.4     8646
+22      Broadcast News  1987    3.4     7940
+28      Last Tango in Paris     1972    3.1     7732                     # limit 10 result.
+36      Into the Woods  1990    4.0     9077
+39      King Kong       1976    3.2     8044
+42      In the Name of the Father       1993    3.9     7972
+48      Emma    1996    3.5     7260
+
+
+---Find the list of years and number of movies released each year.
+
+2011    5511
+2010    5107
+2009    4451
+2012    4339
+2008    3358
+2007    2892
+2006    2416
+2005    1937
+2003    1399
+2004    1381
+
+
+----Find the total number of movies in the dataset.
+
+49590
