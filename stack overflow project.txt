@@ -1,0 +1,272 @@
+create table stock (id int, rep int, dipnme string, loc string, age int)
+row format delimited
+fields terminated by ','
+stored as textfile ;
+
+LOAD DATA LOCAL INPATH 'users.csv' INTO TABLE stock;
+
+create table post (id int, ptyp int, cd timestamp, score int, vc int, oid int, tlt string, ansc int, cmc int)
+LOAD DATA LOCAL INPATH 'posts.csv' INTO TABLE post;
+ 
+---Find the display name and no. of posts created by the user who has got maximum reputation.
+
+select u.id,u.dipnme,p.ptyp, 
+    > count(tlt),max(rep) as total from stock u left outer join post p on u.id = p.id
+    > group by u.id,u.dipnme,p.ptyp order by total desc limit 10 ;
+
+
+
+-----result-----
+
+22656   Jon Skeet       2       1       736381
+29407   Darin Dimitrov  2       1       558878
+23354   Marc Gravell    NULL    0       511429
+17034   Hans Passant    NULL    0       509174
+6309    VonC    2       1       453245
+115145  CommonsWare     NULL    0       430484
+34397   SLaks   2       1       420647
+893     Greg Hewgill    2       1       386251
+14860   paxdiablo       2       1       371082
+95810   Alex Martelli   NULL    0       355764
+
+
+---Find the display name of user who posted the oldest post on Stack Overflow (in terms of date).
+
+
+ select u.id,u.dipnme,
+    > min(cd) as total from post p left outer join stock u on u.id = p.id 
+    > group by u.id,u.dipnme order by total desc limit 10 ;
+
+
+
+-----result-----
+
+
+
+79677   Chris Barr      2008-09-17 03:32:07
+79676   Java Guy        2008-09-17 03:32:07
+79674   cetron  2008-09-17 03:31:39
+79669   bustrofedon     2008-09-17 03:30:37
+79664   korywithak      2008-09-17 03:29:15
+79662   Gavin   2008-09-17 03:29:03
+79646   Odrade  2008-09-17 03:26:40
+79645   Marco   2008-09-17 03:26:32
+79623   Mark Davis      2008-09-17 03:23:50
+79621   zA.     2008-09-17 03:23:04
+
+
+
+----Find the display name and no. of comments done by the user who has got maximum reputation.
+
+
+select u.id,u.dipnme,p.cmc,
+    > max(rep) as total from stock u left outer join post p on u.id = p.id 
+    > group by u.id,u.dipnme,p.cmc order by total desc limit 10 ;
+
+
+-----result-----
+
+
+22656   Jon Skeet       1       736381
+29407   Darin Dimitrov  NULL    558878
+23354   Marc Gravell    NULL    511429
+17034   Hans Passant    NULL    509174
+6309    VonC    1       453245
+115145  CommonsWare     NULL    430484
+34397   SLaks   NULL    420647
+893     Greg Hewgill    4       386251
+14860   paxdiablo       NULL    371082
+95810   Alex Martelli   NULL    355764
+
+
+
+
+------Find the display name of user who has created maximum no. of posts on Stack overflow.
+
+
+select u.id,u.dipnme,
+    > count(tlt) as total from post p left outer join stock u on u.id = p.id  group by u.id,u.dipnme
+    > order by total desc limit 10 ;
+
+
+
+-----result------
+
+
+
+
+NULL    NULL    32137
+22      maclema 1
+19      Mads Kristiansen        1
+79677   Chris Barr      1
+16      Rodrigo Sieiro  1
+13      Chris Jester-Young      1
+11      Anonymous User  1
+9       Kevin Dente     1
+8       Eggs McLaren    1
+79676   Java Guy        1
+
+
+
+-----Find the display name of user who has commented maximum nbr of times in stack over flow.
+
+
+select u.id,u.dipnme,
+    > max(cmc) as total from post p left outer join stock u on u.id = p.id  group by u.id,u.dipnme
+    > order by total desc limit 10 ;
+
+
+-----result------
+
+
+1713    accreativos     57
+NULL    NULL    43
+9099    M_1     34
+4       Joel Spolsky    34
+60442   defeated        33
+58945   Cumatru 31
+9282    user9282        31
+38578   user38578       30
+5562    zzamboni        28
+5754    adinas  28
+
+
+------Find the owner name and id of user whose post has got maximum no. of view counts so far.
+
+select u.id,u.dipnme,
+    > max(vc) as total from post p left outer join stock u on p.id = u.id 
+    > group by u.id,u.dipnme order by total desc limit 10 ;
+
+
+
+------result------
+
+
+
+25969   lost    758492
+NULL    NULL    634130
+28098   z-boss  390016
+26551   quikchange      324428
+72106   victor  298159
+24109   Matt Roberts    289065
+29426   nshaw   254200
+29482   krebstar        247938
+66420   schooner        241669
+61320   Chaddeus        241555
+
+
+
+----Find the title and owner name of the post which has maximum nbr of answer count.
+
+
+select u.id,u.dipnme,p.tlt,
+    > max(ansc) as total from post p left outer join stock u on u.id = p.id 
+    > group by u.id,u.dipnme,p.tlt order by total desc limit 10 ;
+
+
+------result------
+
+
+38210   Colwin  What non-programming books should programmers read?     316
+NULL    NULL    Hidden Features of C#?  296
+NULL    NULL    What is the single most influential book every programmer should read?  213
+62188   user62188       Stack overflow code golf        131
+NULL    NULL    Factorial Algorithms in different languages     129
+NULL    NULL    Recommended Fonts for Programming?      114
+NULL    NULL    What is your single most favorite command-line trick using Bash?        105
+NULL    NULL    Practical non-image based CAPTCHA approaches?   103
+NULL    NULL    Hidden Features of Java 100
+NULL    NULL    Hidden Features of JavaScript?  99
+
+
+
+
+-----Find the title and owner name of post who has got maximum no. of Comment count.
+
+
+select u.id,u.dipnme,p.tlt,
+    > max(cmc) as total from post p left outer join stock u on u.id = p.id 
+    > group by u.id,u.dipnme,p.tlt order by total desc limit 10 ;
+
+
+
+-------result-------
+
+
+
+1713    accreativos             57
+NULL    NULL            43
+NULL    NULL    What is the single most influential book every programmer should read?  35
+NULL    NULL    C#      34
+9099    M_1             34
+4       Joel Spolsky    When setting a form's opacity should I use a decimal or double? 34
+NULL    NULL    When creating a new GUI 34
+60442   defeated                33
+9282    user9282                31
+58945   Cumatru         31
+
+
+
+------Find the location which has maximum no of Stack Overflow users.
+
+
+select loc, count(id) as total from stock group by loc order by total desc limit 10 ;
+
+
+
+-----result------
+
+
+        20208
+United States   2452
+United Kingdom  1170
+London United Kingdom   826
+San Francisco CA        497
+Seattle WA      430
+Australia       424
+New York NY     412
+Germany 405
+California      405
+
+
+
+-----Find the total no. of answers, comments created by Indian users.
+
+
+
+create table total1 as select u.id,u.loc,
+    > sum(ansc),sum(cmc),count(tlt)  
+    > from post p left outer join stock u on u.id = p.id 
+    > group by u.id,u.loc 
+    > select * from total1 where loc = India ;
+
+
+
+-----result------
+
+
+NULL    NULL    35921   21185   32137
+4       New York NY     13      34      1
+8               3       0       1
+9       Oakland CA      37      4       1
+11              28      9       1
+13      Raleigh NC      21      7       1                            # total1
+16      Brazil  5       0       1
+17      Collegeville PA 8       0       1
+19      Denmark 22      10      1
+22      Calgary Canada  NULL    1       1
+
+
+
+
+
+4741    India   NULL    6       1
+6361    India   13      NULL    1
+8127    India   5       1       1
+9195    India   NULL    NULL    1
+11043   India   18      1       1
+12821   India   NULL    NULL    1                                 # list of indian users
+14803   India   NULL    1       1
+15139   India   14      1       1
+15150   India   NULL    NULL    1
+17555   India   NULL    NULL    1
