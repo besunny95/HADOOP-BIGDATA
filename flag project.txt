@@ -1,0 +1,186 @@
+create table country (name string, landmass int, zonegq int, area int, popm int, lang int, religion int, bars int, strips int, colours int, red int, green int, blue int, gold int, white int, black int, orange int, mainh string, circles int, crosses int, salitr int, quatr int, sunstr int, cresnt int, triangle int, icon int, animte int, text int, toplft string, botrght stright)
+row format delimited
+fields terminated by ','
+stored as textfile ;
+
+LOAD DATA LOCAL INPATH 'flagdataset.txt' INTO TABLE country ;
+
+----Count number of countries based on landmass.
+
+select landmass, count(name) from country group by landmass limit 10 ;
+
+-----result----
+
+1       31
+2       17
+3       35
+4       52
+5       39
+6       20
+
+
+-----Count of countries with icon.
+
+select icon, count(name) from country group by icon limit 10 ;
+
+
+----result----
+
+0       145
+1       49
+
+
+----Count of countries which have same top left and top right color in flag.
+
+select toplft,botrght, count(name) from country group by toplft,botrght limit 10 ;  
+
+
+------result-----
+
+black   gold    2
+black   green   6
+black   red     4
+blue    blue    24
+blue    gold    1
+blue    green   2
+blue    red     15
+blue    white   1
+gold    gold    2
+gold    red     3
+
+-------Count number of countries based on zone.
+
+select zonegq, count(name) from country group by zonegq limit 10 ;
+
+
+----result ---------
+
+1       91
+2       29
+3       16
+4       58
+
+---Find out largest county in terms of area in NE zone.
+
+select name,zonegq, max(area) as total  from country group by name,zonegq order by total desc  limit 10 ;
+
+
+------result----
+
+USSR    1       22402
+Canada  4       9976
+China   1       9561
+USA     4       9363
+Brazil  3       8512
+Australia       2       7690
+India   1       3268
+Argentine       3       2777
+Argentina       3       2777
+Sudan   1       2506
+
+-----Find out least populated country in S.Americalandmass.
+
+create table pG as select landmass,name, min(popm) as total from country group by  landmass,name  order by total asc ; 
+
+select * from pG where landmass = 2;
+
+------result------
+
+2       Surinam 0
+2       French-Guiana   0
+2       Falklands-Malvinas      0
+2       Trinidad-Tobago 1
+2       Guyana  1
+2       Panama  2
+2       Uruguay 3
+2       Parguay 3
+2       Bolivia 6
+2       Ecuador 8
+2       Chile   11
+2       Peru    14
+2       Venezuela       15
+2       Argentina       28
+2       Colombia        28
+2       Argentine       28
+2       Brazil  119
+
+
+-----Find out largest speaking language among all countries.
+
+select lang, count(name) as total from country group by lang order by total desc limit 10 ;
+
+------result-------
+
+10      46
+1       43
+6       30
+2       21
+8       19
+3       17
+4       6
+9       4
+5       4
+7       4
+
+-----Count of countries which have both icon and text in flag.
+
+select icon,text, count(name) as total from country group by icon,text order by total desc limit 10 ;
+
+
+------result-----
+
+0       0       142
+1       0       36
+1       1       13
+0       1       3
+
+-----Sum of all circles present in all country flags
+
+select name, sum(circles) as total from country group by name order by total desc limit 10 ;
+
+
+-----result----
+
+Bhutan  4
+Mongolia        2
+Burundi 1
+Brazil  1
+Zaire   1
+Dominica        1
+Cook-Islands    1
+Bermuda 1
+Falklands-Malvinas      1
+Tunisia 1
+
+------Find out top 5 country with Sum of bars and strips in flag.
+
+select name, sum(bars),sum(strips) as total from country group by name order by total desc limit 5 ;
+
+
+---result-------
+
+Malaysia        0       14
+USA     0       13
+Liberia 0       11
+Uruguay 0       9
+Greece  0       9
+
+----Find most common colour among flags from all countries.
+
+
+select colours, count(name) as total from country group by colours order by total desc limit 10;
+
+
+-----result-----
+
+
+3       75
+4       44
+2       42
+5       15
+6       9
+7       7
+8       1
+1       1
+
+
