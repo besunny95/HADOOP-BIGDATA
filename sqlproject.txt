@@ -1,0 +1,108 @@
+create table department 
+( dep_id int primary key,                                                      --QUESTION NO:1
+dep_nme nvarchar(100) not null,
+cont_no int unique
+);
+
+create table employe 
+( 
+emp_id int primary key, 
+dep_id int not null,
+ emp_nme NVARCHAR(100) not null ,                                             --QUESTION NO :2
+ desg nvarchar (100) not null ,              
+ salary money
+ constraint fk_dep_id
+ foreign key (dep_id)
+ references department (dep_id)
+);
+
+alter table department add city nvarchar(50)                                   --QUESTION NO: 3
+
+alter table employe alter column salary char(10)                               --QUESTION NO:4
+
+alter table department drop city                                                --QUESTION NO:5
+
+alter table department alter column dep_nme dept_nme                                 --QUESTION NO :6
+
+insert into department 
+values('emp-1', 'dept-1', 0110);
+insert into department 
+values('emp-2', 'dep-2' ,0111);
+insert into department 
+values ('emp-1' , 'dep-3' ,0112);
+
+insert into employe
+values( 'emp-1', 'dep-1', 's ahamed', 'sales', 'manger', 50000 ,'new delhi');
+
+insert into employe
+values ( 'emp-2', 'dep-2', 'anand', 'senior mngr', 40000 ,'new delhi' );
+
+insert into employe
+values ( 'emp-3', 'dep-3', 'aruna', 'accounds mngr', 45000 ,'new delhi');
+ insert into employe
+ values( 'emp-4', 'dep-3', 'alpesh', 'accoundant', 35000 ,'banglore' );
+ insert into employe
+ values ('emp-5', 'dep-1', 'monica','incharge', 25000,'noida') ;
+insert into employe
+values ('emp-6', 'dep-1', 'harish', 'sales man', 15000 , 'banglore');
+
+update department set cont_no = 0116 where dep_id = 6 ;                               --QUESTION NO:7
+ select * from employe emp_id ;
+ select * from employe emp_nme;                                                        --QUESTION NO:8
+ select * from  employe desg;
+ select * from employe where salary >30000 ;                                           --QUESTION NO :9
+ select * from employee where salary >  14000 and salary < 30000 ;                        --QUESTION NO:10
+ select * from employee where city = banglore ;                                          --QUESTION NO:11
+ select * from employe order by salary desc ;                                              --QUESTION NO:14
+ select  AVG ( salary) from employe ;                                                      --QUESTION NO :16
+
+
+ create table company 
+ (
+ emp_id int 
+ Name nvarchar(50) 
+ age int 
+ address nvarchar(50)
+ salary numeric(3,2)
+ join_d date 
+ );
+
+ insert into  table company 
+ values ( 1 , 'paul' , 32 , 'california', 20000, 2001-7-13);
+ insert into table company 
+ values ( 3 ,'allen', 23, 'norway', 20000, );
+ insert into table company 
+ values (4 ,'david', 25, 'richmount circle', 650000, 2010-10-15);
+ insert into table company 
+ values(5,'mark', 27, 'texas',35000,2015-11-02);
+
+ create table dept 
+ (
+ id int 
+ dep nvarchar(20)
+ emp_id int 
+ );
+ insert into table dept 
+ values (1,'it billing',1);
+ insert into table dept 
+ values (2,'engg',2);
+ insert into table dept 
+ values (3,'finance' ,41
+ );
+
+ select * from company as t1;
+select * from dept as t2;
+
+select t2.emp_id, t2.dep,t1.name,t1.age,t1.salary ,
+from t1 left outer join t2,
+on t1.emp_id = t2.emp_id                                                                         -- QUESTION NO : 17
+order by desc;
+
+
+
+ 
+
+
+
+
+
