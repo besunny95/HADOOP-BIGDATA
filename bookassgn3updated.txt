@@ -1,0 +1,88 @@
+---Find out how many book were published based on rating in the year 2002
+
+
+CREATE TABLE bx_books (isbn int, btl string , ba string, yofp int, pbl string, URL_S string, URL_M string, URL_L string)
+
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+ 
+WITH SERDEPROPERTIES (
+ 
+"separatorChar" = "\;",                                                     # CREATING TABLE bx_books 
+ 
+"quoteChar" = "\""
+ 
+) STORED AS TEXTFILE
+tblproperties("skip.header.line.count"="1");
+
+
+LOAD DATA LOCAL INPATH 'BX-Books.csv' INTO TABLE bx_books;                   # LOADING THE FILE INTO TABLE 
+
+
+CREATE TABLE bx_ratings (userid string, isbn int, book_r int )
+
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+ 
+WITH SERDEPROPERTIES (
+ 
+"separatorChar" = "\;",
+                                                                               # CREATING TABLE bx_ratings
+"quoteChar" = "\""
+ 
+) STORED AS TEXTFILE
+tblproperties("skip.header.line.count"="1");
+
+
+LOAD DATA LOCAL INPATH 'BX-Book-Ratings.csv' INTO TABLE bx_ratings;
+
+
+
+create table joinur1 as select b.yofp,r.book_r,b.isbn,
+    > count(b.btl) as total
+    > from bx_books b left outer join bx_ratings r on (b.isbn = r.isbn)
+    > group by b.yofp,r.book_r,b.isbn
+    > order by total desc ;
+
+
+select * from joinur1 where yofp = 2002;
+
+select count(*) from joinur1 where yofp = 2002;
+
+
+-----------result--------
+
+
+2004    0       0971880107      1921
+2002    0       0316666343      588
+1997    0       0060928336      412
+2003    0       0385504209      396                                             #  table joinur1 .
+2001    0       044023722X      366
+1995    0       067976402X      358
+1993    0       0440214041      349
+1998    0       0312195516      340
+
+
+
+
+
+
+2002    0       0316666343      588
+2002    0       0440241073      256
+2002    0       0312278586      248
+2002    0       0743418174      234                                                # filtering 2002 results.
+2002    0       0446610038      214
+2002    0       0060502258      210
+2002    0       0060934417      191
+2002    8       0316666343      188
+2002    0       0380731851      185
+2002    9       0316666343      179
+
+
+
+
+
+
+33130                                                                               # nbr of books published in the year 2002.
+
+
+
+
